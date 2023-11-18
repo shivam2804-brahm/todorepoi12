@@ -1,16 +1,14 @@
 steps:
 - name: 'gcr.io/cloud-builders/gcloud'
-  args:
-  - 'compute'
-  - 'ssh'
-  - 'root@secondtodo'
-  - '--zone'
-  - 'asia-south1-c'
-  - '--command'
-  - |
-    ls /home/santhosh/todoappbysql/
-    cd /home/santhosh/todoappbysql/
-    go mod init github.com/santhoshsapare/main
-    go mod tidy
-    go build main.go
-    ./main
+  args: ['compute', 'ssh', 'root@secondtodo', '--zone', 'asia-south1-c', '--command',
+    'ls /home/santhosh/todoappbysql/ && cd /home/santhosh/todoappbysql/ && go mod init github.com/santhoshsapare/main && go mod tidy && go build main.go && ./main']
+
+options:
+  logging: 'CLOUD_LOGGING_ONLY'
+
+serviceAccount: 'your-service-account@your-project.iam.gserviceaccount.com'
+
+artifacts:
+  objects:
+    location: 'gs://your-logs-bucket'
+    paths: ['/path/to/artifacts']  # Modify this to the actual path of your build artifacts
