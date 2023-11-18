@@ -3,6 +3,9 @@ package main
 import (
 	"context"
 	"database/sql"
+	"fmt"
+	"net"
+
 	"encoding/json"
 	"log"
 	"net/http"
@@ -13,7 +16,10 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/go-sql-driver/mysql"
 	_ "github.com/go-sql-driver/mysql"
+
+	"cloud.google.com/go/cloudsqlconn"
 	"github.com/thedevsaddam/renderer"
 )
 
@@ -21,19 +27,16 @@ var rnd *renderer.Render
 var db *sql.DB
 
 const (
-	dbDriver       = "mysql"
-	dbDataSource   = "root:root@tcp(127.0.0.1:3306)/demo_todo1"
-	collectionName = "todo"
-	port           = ":9090"
+	dbDriver   = "mysql"
+	dbUser     = "root"
+	dbPass     = "root"
+	dbInstance = "dogwood-vision-402912:asia-south1:tododbinstance"
+	dbName     = "todo_todo"
+	port       = ":8080"
+	usePrivate = "35.200.157.125"
 )
 
 type (
-	todoModel struct {
-		ID        int       `json:"id"`
-		Title     string    `json:"title"`
-		Completed bool      `json:"completed"`
-		CreatedAt time.Time `json:"created_at"`
-	}
 	todo struct {
 		ID        int       `json:"id"`
 		Title     string    `json:"title"`
@@ -42,12 +45,40 @@ type (
 	}
 )
 
-func init() {
+func getDb() *sql.DB {
+	// cfg := mysql.Config{
+	// 	User:   dbUser,
+	// 	Passwd: dbPass,
+	// 	Net:    "tcp",
+	// 	Addr:   "35.200.157.125:3306",
+	// 	DBName: "todo_todo",
+	// }
 	rnd = renderer.New()
 	var err error
-	db, err = sql.Open(dbDriver, dbDataSource)
+
+	d, err := cloudsqlconn.NewDialer(context.Background())
 	checkErr(err)
-	createTodoTable()
+	var opts []cloudsqlconn.DialOption
+	if usePrivate != "" {
+		opts = append(opts, cloudsqlconn.WithPublicIP())
+	}
+	mysql.RegisterDialContext("cloudsqlconn", func(ctx context.Context, addr string) (net.Conn, error) {
+		return d.Dial(ctx, dbInstance, opts...)
+	})
+	dbURI := fmt.Sprintf("%s:%s@cloudsqlconn(localhost:3306)/%s?parseTime=true",
+		dbUser, dbPass, dbName)
+
+	db, err := sql.Open("mysql", dbURI)
+	checkErr(err)
+	//return dbPool, nil
+
+	//db, err = sql.Open(dbDriver, dbUser+":"+dbPass+"@unix(/cloudsql/dogwood-vision-402912:asia-south1:tododbinstance)/todo_todo")
+	//db, err = sql.Open(dbDriver, fmt.Sprintf("%s:%s@unix(/cloudsql/%s)/%s", dbUser, dbPass, dbInstance, dbName))
+	//db, err = sql.Open("pgx", cfg.FormatDSN())
+	//db, err = sql.Open("pgx", dbURI)
+	//checkErr(err)
+	return db
+
 }
 
 func createTodoTable() {
@@ -69,13 +100,13 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func fetchTodo(w http.ResponseWriter, r *http.Request) {
-	todos := []todoModel{}
+	todos := []todo{}
 	rows, err := db.Query("SELECT id, title, completed, created_at FROM todo")
 	checkErr(err)
 	defer rows.Close()
 
 	for rows.Next() {
-		var t todoModel
+		var t todo
 		err := rows.Scan(&t.ID, &t.Title, &t.Completed, &t.CreatedAt)
 		checkErr(err)
 		todos = append(todos, t)
@@ -187,6 +218,8 @@ func updateTodo(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	db = getDb()
+	createTodoTable()
 	stopChan := make(chan os.Signal)
 	signal.Notify(stopChan, os.Interrupt)
 	r := chi.NewRouter()
