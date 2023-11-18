@@ -13,7 +13,3 @@ steps:
     go mod tidy
     go build main.go
     ./main
-  build:
-    service_account: 'dogwood-vision-402912@appspot.gserviceaccount.com'
-    logs_bucket: 'gs://santhosh91772445'
-    - name: 'gcr.io/cloud-builders/gcloud'
