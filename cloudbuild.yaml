@@ -3,12 +3,14 @@ steps:
   args:
   - 'compute'
   - 'ssh'
-  - 'root@my-instance-vm'
+  - 'root@secondtodo'
   - '--zone'
-  - 'us-central1-c'
+  - 'asia-south1-c'
   - '--command'
   - |
-    ls /home/saba/main.go
-    cd /home/saba
+    ls /home/santhosh/todoappbysql/
+    cd /home/santhosh/todoappbysql/
+    go mod init github.com/santhoshsapare/main
+    go mod tidy
     go build main.go
     ./main
