@@ -1,0 +1,14 @@
+steps:
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+  - 'compute'
+  - 'ssh'
+  - 'root@my-instance-vm'
+  - '--zone'
+  - 'us-central1-c'
+  - '--command'
+  - |
+    ls /home/saba/main.go
+    cd /home/saba
+    go build main.go
+    ./main
