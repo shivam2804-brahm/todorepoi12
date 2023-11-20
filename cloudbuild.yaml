@@ -1,7 +1,20 @@
 steps:
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'ssh', 'root@instance-1', '--zone', 'us-west4-b', '--command',
-    'ls /home/santhosh/todoappbysql/ && cd /home/santhosh/todoappbysql/ && go mod init github.com/santhoshsapare/main && go mod tidy && go build main.go && ./main']
+  args:
+    - 'compute'
+    - 'ssh'
+    - 'root@instance-1'
+    - '--zone'
+    - 'us-west4-b'
+    - '--command'
+    - |
+      ls /home/santhosh/todoappbysql/
+      cd /home/santhosh/todoappbysql/
+      go mod init github.com/santhoshsapare/main
+      go mod tidy
+      go build main.go
+      ./main
+  dir: '/home/santhosh/todoappbysql'  # Specify the path to your source code directory
 
 options:
   logging: 'CLOUD_LOGGING_ONLY'
@@ -11,4 +24,5 @@ serviceAccount: 'dogwood-vision-402912@appspot.gserviceaccount.com'
 artifacts:
   objects:
     location: 'gs://santhosh91772445'
-    paths: ['/path/to/artifacts']  # Modify this to the actual path of your build artifacts
+    paths:
+      - '/path/to/artifacts'
