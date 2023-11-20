@@ -3,7 +3,7 @@ steps:
   args:
   - 'compute'
   - 'ssh'
-  - 'santhosh@instance-todo1'
+  - 'santhosh@instance-todo2'
   - '--zone'
   - 'us-central1-c'
   - '--command'
