@@ -1,11 +1,4 @@
 steps:
-- name: 'gcr.io/cloud-builders/go'
-  entrypoint: 'bash'
-  args:
-    - '-c'
-    - |
-      echo "export GOPATH=/home/santhosh/gopath/go" >> ~/.bashrc
-      echo "export PATH=/home/santhosh/go/bin:/home/santhosh/go/bin" >> ~/.bashrc
 - name: 'gcr.io/cloud-builders/gcloud'
   args:
   - 'compute'
