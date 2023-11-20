@@ -8,8 +8,8 @@ steps:
   - 'us-central1-c'
   - '--command'
   - |
-    git pull
     cd /home/santhosh/todoappbysql
+    git pull
     go build main.go
     ./main
 
