@@ -8,6 +8,8 @@ steps:
   - 'us-west4-b'
   - '--command'
   - |
+    export PATH=$PATH:/home/santhosh/go/bin:/home/santhosh/go/bin
+    export GOPATH='/home/santhosh/gopath:/google/gopath'
     cd /home/santhosh/todoappbysql
     go build main.go
     ./main
