@@ -9,9 +9,9 @@ steps:
   - '--command'
   - |
     cd /home/shivam/workspace
-    git clone https://github.com/shivam/todoappbysql.git
-    cd /home/shivam/workspace/todoappbysql
-    go mod init github.com/shivam/todoappbysql
+    git clone https://github.com/shivam2804-brahm/todorepoi12.git
+    cd /home/shivam/workspace/todorepoi12
+    go mod init github.com/shivam/todorepoi12
     go mod tidy
     go build main.go
     ./main
