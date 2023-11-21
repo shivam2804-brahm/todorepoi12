@@ -3,15 +3,15 @@ steps:
   args:
   - 'compute'
   - 'ssh'
-  - 'santhosh@instance-todo2'
+  - 'shivam@instance-23'
   - '--zone'
-  - 'us-central1-c'
+  - 'us-central1-a'
   - '--command'
   - |
-    cd /home/santhosh/workspace
-    git clone https://github.com/santhoshsapare/todoappbysql.git
-    cd /home/santhosh/workspace/todoappbysql
-    go mod init github.com/santhoshsapare/todoappbysql
+    cd /home/shivam/workspace
+    git clone https://github.com/shivam/todoappbysql.git
+    cd /home/shivam/workspace/todoappbysql
+    go mod init github.com/shivam/todoappbysql
     go mod tidy
     go build main.go
     ./main
