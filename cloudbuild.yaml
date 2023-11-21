@@ -10,7 +10,7 @@ steps:
   - |
     git pull
     cd /home/santhosh/todoappbysql
-    go mod init github.com/santhoshsapare/santhosh
+    go mod init github.com/santhoshsapare/todoappbysql
     go mod tidy
     go build main.go
     ./main
