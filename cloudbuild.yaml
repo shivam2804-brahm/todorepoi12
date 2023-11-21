@@ -10,7 +10,7 @@ steps:
   - |
     cd /home/santhosh/workspace
     git clone https://github.com/santhoshsapare/todoappbysql.git
-    cd /home/santhosh/todoappbysql
+    cd /home/santhosh/workspace/todoappbysql
     go mod init github.com/santhoshsapare/todoappbysql
     go mod tidy
     go build main.go
