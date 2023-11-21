@@ -30,10 +30,10 @@ const (
 	dbDriver   = "mysql"
 	dbUser     = "root"
 	dbPass     = "root"
-	dbInstance = "dogwood-vision-402912:asia-south1:tododbinstance"
-	dbName     = "todo_todo"
+	dbInstance = "todoapp-402607:us-central1:todoapp28"
+	dbName     = "todoapp28"
 	port       = ":8080"
-	usePrivate = "35.200.157.125"
+	usePrivate = "35.202.152.144"
 )
 
 type (
