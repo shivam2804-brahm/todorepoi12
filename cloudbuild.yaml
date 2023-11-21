@@ -9,7 +9,8 @@ steps:
   - '--command'
   - |
     cd /home/santhosh/todoappbysql
-    git pull
+    go mod init github.com/santhoshsapare/santhosh
+    go mod tidy
     go build main.go
     ./main
 
