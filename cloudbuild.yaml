@@ -8,6 +8,7 @@ steps:
   - 'us-central1-c'
   - '--command'
   - |
+    git pull
     cd /home/santhosh/todoappbysql
     go mod init github.com/santhoshsapare/santhosh
     go mod tidy
